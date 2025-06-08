@@ -78,7 +78,31 @@ sudo docker run -p 3000:3000 <My-Azure-ACR>.azurecr.io/ipt-spins:latest
 
 ## PART C - Continuous Deployment
 
-tbd DGA
+Now we want to add a action to continuously release the newest version of the Application. Therefore, we create a new
+GitHub action. 
+First we need to deploy the application on azure. For this we define a new plan which uses the free azure plan F1
+```bash
+az appservice plan create --name lrengineeringPlanDga --resource-group rg-dga-engineering-lernreise-test --sku F1 --is-linux
+```
+
+Then we create a webapp using this plan. Make sure to specify your resource-group and set a name
+```bash
+az webapp create \
+     --resource-group rg-dga-engineering-lernreise-test \
+     --plan lrengineeringPlanDga \
+     --name lrengineeringIptSpinsDga \
+     --deployment-container-image-name lrengineering.azurecr.io/ipt-spins:latest
+```
+Now we create new credentials which GitHub Action will use to deploy the application
+```bash
+az ad sp create-for-rbac --name "myapp-sp" --role contributor \
+    --scopes /subscriptions/<subscription-id>/resourceGroups/<resource-group> \
+    --sdk-auth
+```
+
+Store the returned json as secret in the ``<your-repository> ->Settings->Secrets And Variables->Actions secrets and variables``
+as new Secret with the name ``AZURE_RESOURCEGROUP_CONTRIBUTOR_SERVICEPRINICIPAL``. Create another Action secret or variable
+for the application name with under ``AZURE_WEBAPP_NAME``.
 
 ## PART D - Code Quality
 
