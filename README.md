@@ -111,7 +111,8 @@ for the application name with under ``AZURE_WEBAPP_NAME`` containing ``<your-web
 5. Optional: Check the "Quality Gates" section in your SonarCloud organisation. Your can add and customize your own quality gates.
 
 ### Extend your GitHub Actions to use SonarCloud
-1. Follow the **Task D.1** in docker-publish.yml to enable SonarCloud analysis for each new Pull Request.
+1. Follow the **Task D.1** in docker-publish.yml to enable SonarCloud analysis for each new Pull Request. \
+  a) Use the Project Key and Organization Key found in your SonarCloud project under 'Information'
 2. Observe your issues in SonarCloud, namely in App.tsx and Dockerfile. Fix them.
 
 ## PART E - Security (Optional)
