@@ -11,17 +11,20 @@ This readme helps you to create an CI environment which builds your project, pub
 
 # Setup
 1. Create a **public** fork of this Github repo **in your private github namespace** (this is required as we are using the FREE version of SonarCloud later on) \
-  a) Create an empty repository in your personal github namespace \
-  b) Execute in your local terminal:
+  a) Note: If the 'fork' button in the repo does not work (e.g. because the iptch repo is currently not public or forking is disabled on organization-level), you can do it manually:
 ```
+# 1. Create an public repository in your personal github namespace
+# 2. Execute in your local terminal:
 git clone git@github.com:iptch/engineering-fundamentals.git
 cd engineering-fundamentals
 git remote remove origin
 git remote add origin https://github.com/<YourUsername>/<YourRepoName>.git
 git push --set-upstream origin main
 ```
-2. Create Codespace (https://github.com/YourUsername/YourRepoName &rarr; Code &rarr; Codespaces) and install the azure cli
+2. Create Codespace (https://github.com/YourUsername/YourRepoName &rarr; Code &rarr; Codespaces) and install the azure cli \
+<img src="images/codespace.png" alt="Codespaces" width="300px">
 ```
+# Inside Codespace
 pip install azure-cli
 ```
 3. Verification
