@@ -19,7 +19,6 @@ git clone git@github.com:iptch/engineering-fundamentals.git
 cd engineering-fundamentals
 git remote remove origin
 git remote add origin https://github.com/<YourUsername>/<YourRepoName>.git
-git remote add origin git@github.com:iptch/engineering-fundamentals.git
 git push --set-upstream origin main
 ```
 2. Create Codespace (https://github.com/YourUsername/YourRepoName &rarr; Code &rarr; Codespaces) and install the azure cli \
