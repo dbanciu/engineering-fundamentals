@@ -19,6 +19,7 @@ git clone git@github.com:iptch/engineering-fundamentals.git
 cd engineering-fundamentals
 git remote remove origin
 git remote add origin https://github.com/<YourUsername>/<YourRepoName>.git
+git remote add origin git@github.com:iptch/engineering-fundamentals.git
 git push --set-upstream origin main
 ```
 2. Create Codespace (https://github.com/YourUsername/YourRepoName &rarr; Code &rarr; Codespaces) and install the azure cli \
@@ -121,15 +122,18 @@ for the application name with under ``AZURE_WEBAPP_NAME`` containing ``<your-web
   a) Issue in **App.tsx** (in Maintainability) \
   b) Issue in **Dockerfile** (in Security Hotspots)
 
-## PART E - Security (Optional)
+## PART E - Security (Requires Part B)
 
 ### Use OIDC instead of Admin credentials
 Instead of using the ACR Admin credentials, extend your setup to use OIDC.
 
-## PART F - GitOps (Optional)
+## PART F - GitOps (Requires Part B)
 
 ### Use ArgoCD
-Replace the deployment github action in PART C with ArgoCD.
+ArgoCD is a heavy used tool to enable gitops. It monitors your github repository and applies the configuration to the configured namespace.
+
+Deploy an AKS cluster and install ArgoCD on it. Then configure ArgoCD to monitor your github repository and apply the configuration to the configured namespace.
+
 
 ## PART G - Dependency Management
 
