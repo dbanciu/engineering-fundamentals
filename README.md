@@ -12,6 +12,7 @@ This readme helps you to create an CI environment which builds your project, pub
 # Setup
 1. Create a **public** fork of this Github repo **in your private github namespace** (this is required as we are using the FREE version of SonarCloud later on) \
   a) Note: If the 'fork' button in the repo does not work (e.g. because the iptch repo is currently not public or forking is disabled on organization-level), you can do it manually:
+
 ```
 # 1. Create an public repository in your personal github namespace
 # 2. Execute in your local terminal:
@@ -21,14 +22,18 @@ git remote remove origin
 git remote add origin https://github.com/<YourUsername>/<YourRepoName>.git
 git push --set-upstream origin main
 ```
+
 2. Create Codespace (https://github.com/YourUsername/YourRepoName &rarr; Code &rarr; Codespaces) and install the azure cli \
 <img src="images/codespace.png" alt="Codespaces" width="300px">
+
 ```
 # Inside Codespace
 pip install azure-cli
 ```
+
 3. Verification
 Check your setup by running the react app in your codespace. You should be able to access the Webapp in your browser.
+
 ```bash
 nvm install node
 npm install
@@ -53,6 +58,7 @@ Fast shipping of new code can be crutial, for example in the case of security up
 In this section you are going to create a GitHub Action which runs after the publishing to Azure was successful. 
 
 Prerequisites:
+
 0. Access to ipt Sandbox in Azure
 1. Azure Service Plan (Capacity (sku): F1)
 2. Azure Web App where the application is deployed
@@ -61,6 +67,7 @@ Prerequisites:
 The following steps work best if you previously completed PART B (automatic publishing to Azure Container Registry). If you haven't completed PART B, you can just manually publish your Image to Azure Container Registry (needs to be created first).
 
 Let's get started: 
+
 1. Create a new workflow for GitHub where you deploy the latest version of your application which you published before to the registry.
 2. Test your setup by making a change on the codebase (for example make the logo spin faster) and verify that the change is visible on your deployed webapp.
 
