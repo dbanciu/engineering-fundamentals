@@ -3,10 +3,10 @@ run-name: test started by ${{ github.actor }}
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 
 jobs:
   build:
