@@ -17,4 +17,6 @@ test("increments count when button is clicked", () => {
     // 3. Verify that the button text has updated to 1
     const updatedButton = screen.getByRole("button", { name: /count is 1/i });
     expect(updatedButton).toBeInTheDocument();
+
+    // Test
 });
