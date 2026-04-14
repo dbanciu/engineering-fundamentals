@@ -1,0 +1,14 @@
+# AI Code Review git hook configuration file
+# Copy this file to .ai-review-config and fill in your details.
+# DO NOT commit .ai-review-config to the repository if it contains real secrets!
+
+# Your custom subscription API key
+AI_REVIEW_API_KEY="your-api-key-here"
+
+# The specific model you want to use
+# Examples: "gpt-4o", "gpt-4o-mini", "claude-3-5-sonnet-20240620"
+AI_REVIEW_MODEL="gpt-4o-mini"
+
+# The standard API Endpoint for Chat Completions
+# Default is OpenAI, but works with any OpenAI-compatible endpoint (like Together AI, Groq, Ollama, standard proxies)
+AI_REVIEW_API_URL="https://api.openai.com/v1/chat/completions"

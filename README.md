@@ -121,15 +121,38 @@ for the application name with under ``AZURE_WEBAPP_NAME`` containing ``<your-web
   a) Issue in **App.tsx** (in Maintainability) \
   b) Issue in **Dockerfile** (in Security Hotspots)
 
-## PART E - Security (Optional)
+## PART E - Security (Requires Part B)
 
 ### Use OIDC instead of Admin credentials
 Instead of using the ACR Admin credentials, extend your setup to use OIDC.
 
-## PART F - GitOps (Optional)
+## PART F - GitOps (Requires Part B)
 
 ### Use ArgoCD
-Replace the deployment github action in PART C with ArgoCD.
+ArgoCD is a heavy used tool to enable gitops. It monitors your github repository and applies the configuration to the configured namespace.
+
+Deploy an AKS cluster and install ArgoCD on it. Then configure ArgoCD to monitor your github repository and apply the configuration to the configured namespace.
+
+
+## PART G - Dependency Management
+
+### Manage Dependencies
+Dependency management is a crucial part of software development. It helps you to keep your dependencies up to date and secure. 
+
+There are multiple tools and technologies to manage dependencies. Check which tool or technology fits best for your project and your needs. Take into account that this solution should be used in enterprise environments with multiple developers and multiple projects.
+
+Add a workflow to your project to automatically update dependencies.
+
+Be careful with permissions and tokens...
+
+## PART H - AI Code Review
+
+Add the capability to your project to automatically review code changes using AI.
+ 
+There are different possibilities to achieve this. For example there are different AI providers and different ways to integrate them into your project. List the advantages and disadvantages of the different approaches and choose the one that best suits your needs.
+
+PS: Keep the trivy incident in mind ;-) 
+
 
 # Debug / FAQ
 ### "Build and Push Docker Image" fails with

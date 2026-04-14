@@ -1,0 +1,26 @@
+name: Renovate
+
+on:
+  schedule:
+    # Run once a day at 00:00 (UTC)
+    - cron: '0 0 * * *'
+  # Allow triggering the workflow manually
+  workflow_dispatch:
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v40.1.3
+        env:
+          # Run renovate on the repository where this workflow is hosted
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          # Enable more verbose logging in GitHub actions
+          LOG_LEVEL: "info"
+        with:
+          configurationFile: renovate.json
+          token: ${{ secrets.RENOVATE_TOKEN }}

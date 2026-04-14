@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+# AI Code Review Git pre-push hook
+
+# Attempt to load local config if exists
+CONFIG_FILE="$(git rev-parse --show-toplevel)/.ai-review-config"
+if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+fi
+
+if [ -z "$AI_REVIEW_API_KEY" ]; then
+    echo "⏭️  AI Code Review skipped: AI_REVIEW_API_KEY environment variable is not set."
+    echo "   Create a .ai-review-config file based on .ai-review-config.example"
+    exit 0
+fi
+
+API_URL="${AI_REVIEW_API_URL:-https://api.openai.com/v1/chat/completions}"
+MODEL="${AI_REVIEW_MODEL:-gpt-5-nano}"
+
+# Get the commits about to be pushed
+# pre-push hook reads from stdin: <local ref> <local sha1> <remote ref> <remote sha1>
+DIFF_OUTPUT=""
+while read local_ref local_sha remote_ref remote_sha
+do
+    if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+        # Deleting a branch - no review needed
+        continue
+    fi
+    
+    if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+        # Pushing a new branch
+        # Fallback: compare with main or master if possible
+        base=$(git merge-base HEAD origin/main 2>/dev/null || git merge-base HEAD origin/master 2>/dev/null)
+        if [ -n "$base" ]; then
+            DIFF_OUTPUT=$(git diff "$base"..."$local_sha")
+        else
+            # Worst case, compare against empty tree
+            DIFF_OUTPUT=$(git diff 4b825dc642cb6eb9a060e54bf8d69288fbee4904..."$local_sha")
+        fi
+    else
+        # Updating an existing branch
+        DIFF_OUTPUT=$(git diff "$remote_sha"..."$local_sha")
+    fi
+done
+
+if [ -z "$DIFF_OUTPUT" ]; then
+    echo "✅ No code changes found to review, continuing push."
+    exit 0
+fi
+
+if ! command -v jq &> /dev/null; then
+    echo "❌ Error: 'jq' is required to parse the AI response."
+    echo "   Install it on macOS via: brew install jq"
+    exit 1
+fi
+
+echo "🤖 Submitting diff for AI Code Review using model: $MODEL..."
+
+# Safely construct the JSON payload using jq
+JSON_PAYLOAD=$(jq -n \
+  --arg model "$MODEL" \
+  --arg diff "$DIFF_OUTPUT" \
+  '{
+    model: $model,
+    messages: [
+      {role: "system", content: "You are an expert AI code reviewer. Point out potential bugs, bad patterns, style issues, or security concerns. Focus on substance over formatting. Keep responses highly concise and actionable."},
+      {role: "user", content: ("Please review the following code changes.\n\nDiff:\n" + $diff)}
+    ]
+  }')
+
+# Send request to the LLM
+RESPONSE=$(curl -s -X POST "$API_URL" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $AI_REVIEW_API_KEY" \
+  -d "$JSON_PAYLOAD")
+
+# Parse response or fallback to error message
+REVIEW=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // ("API Error: " + (.error.message // tostring))')
+
+echo ""
+echo "==================== AI CODE REVIEW ===================="
+echo "$REVIEW"
+echo "========================================================"
+echo ""
+
+# Hooks run in the background by default and do not have access to terminal input.
+# We redirect input from /dev/tty so the prompt works in the terminal.
+exec < /dev/tty
+
+while true; do
+    read -p "🤔 Proceed with the push? [y/N]: " yn
+    case $yn in
+        [Yy]* ) echo "🚀 Continuing with push..."; exit 0;;
+        [Nn]* | "" ) echo "🚫 Push aborted by user."; exit 1;;
+        * ) echo "Please answer y or n.";;
+    esac
+done
