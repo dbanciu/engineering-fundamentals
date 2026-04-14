@@ -1,11 +1,12 @@
 name: run-npm-test
 run-name: test started by ${{ github.actor }}
 on:
-  [push,
-  pull_request:
-    # Sequence of patterns matched against refs/heads
+  push:
     branches:
-      - main]
+    - master
+  pull_request:
+    branches:
+    - master
 
 steps:
 - uses: actions/checkout@v5
